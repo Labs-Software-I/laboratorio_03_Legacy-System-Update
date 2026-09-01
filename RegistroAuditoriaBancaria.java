@@ -5,7 +5,7 @@ public class RegistroAuditoria implements AutoCloseable {
         if (!abierto){
             throw new IllegalStateException("El registro de auditoría está cerrado.");
         }
-        System.out.println("AUDITORIA: " + mensaje);
+        System.out.println("=== AUDITORIA: " + mensaje);
     }
 
     @Override
