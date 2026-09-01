@@ -9,6 +9,17 @@ public abstract class CuentaBancaria {
         this.saldo = saldoInicial;
     }
 
+    public boolean transferir(double monto, CuentaBancaria destino, RegistroAuditoriaBancaria auditoria) {
+        if (monto > 0 && saldoSuficiente(monto)) {
+            this.retirar(monto);
+            auditoria.registrarEvento("Transferencia EXITOSA de $" + monto + " de " + getTitular() + " a " + destino.getTitular());
+            return true;
+        }
+
+        auditoria.registrarEvento("Transferencia FALLIDA de $" + monto + " desde la cuenta de " + getTitular());
+        return false;
+    }
+
     public void depositar(double monto) {
         if (monto > 0) {
             setSaldo(getSaldo() + monto);
