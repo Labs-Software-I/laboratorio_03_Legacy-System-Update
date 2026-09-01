@@ -1,33 +1,33 @@
 public class CuentaCorriente extends CuentaBancaria {
-    private double cupoSobregiro;
-    private double comisionSobregiro;
+    private final double cupoSobregiro;
+    private final double comisionSobregiro;
 
-    public CuentaCorriente(String numeroCuenta, String titular, double saldoInicial, double cupoSobregiro, double comisionSobregiro) {
-        super(numeroCuenta, titular, saldoInicial);
+    public CuentaCorriente(String numeroCuenta, String titular, double saldo, double cupoSobregiro, double comisionSobregiro) {
+        super(numeroCuenta, titular, saldo);
         this.cupoSobregiro = cupoSobregiro;
         this.comisionSobregiro = comisionSobregiro;
     }
 
-    @Override
-    protected boolean puedeRetirar(double monto) {
-        // Regla de negocio: Permite saldo negativo hasta el límite del cupo de sobregiro
-        return (getSaldo() + cupoSobregiro) >= monto;
+     @Override
+    public void retirar(double monto) {
+        if (monto > 0 && saldoSuficiente(monto)) {
+            setSaldo(getSaldo() - monto);
+        }
     }
 
     @Override
+    protected boolean saldoSuficiente(double monto) {
+        return (getSaldo() + cupoSobregiro) >= monto;
+    }
+
+      @Override
     public void aplicarComisionMensual() {
         if (getSaldo() < 0) {
-            // Si la cuenta está en sobregiro, aplica el cobro por mora/comisión de sobregiro
-            double cobroPorSobregiro = Math.abs(getSaldo()) * comisionSobregiro;
-            setSaldo(getSaldo() - cobroPorSobregiro);
-            System.out.println("Comisión aplicada por sobregiro: -" + cobroPorSobregiro 
-                               + " | Nuevo Saldo: $" + getSaldo());
-        } else {
-            System.out.println("Sin cobros de sobregiro para la cuenta corriente " + getNumeroCuenta());
+            double cobroMora = Math.abs(getSaldo()) * comisionSobregiro;
+            setSaldo(getSaldo() - cobroMora);
         }
     }
 
     public double getCupoSobregiro() { return cupoSobregiro; }
-    public void setCupoSobregiro(double cupoSobregiro) { this.cupoSobregiro = cupoSobregiro; }
     public double getComisionSobregiro() { return comisionSobregiro; }
 }   

@@ -9,9 +9,10 @@ public class CuentaAhorros extends CuentaBancaria {
     }
 
     @Override
-    public void aplicarComisionMensual() {
-        double comision = getSaldo() * tasaInteresMensual;
-        setSaldo((getSaldo() + comision) - getComisionManejoMensual())
+    public void retirar(double monto) {
+        if (monto > 0 && saldoSuficiente(monto)) {
+            setSaldo(getSaldo() - monto);
+        }
     }
 
     @Override
@@ -20,10 +21,9 @@ public class CuentaAhorros extends CuentaBancaria {
     }
 
     @Override
-    public void retirar(double monto) {
-        if (monto > 0 && saldoSuficiente(monto)) {
-            setSaldo(getSaldo() - monto);
-        }
+    public void aplicarComisionMensual() {
+        double comision = getSaldo() * tasaInteresMensual;
+        setSaldo((getSaldo() + comision) - getComisionManejoMensual())
     }
 
     public double getTasaInteresMensual() { return tasaInteresMensual; }
