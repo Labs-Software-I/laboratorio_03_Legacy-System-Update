@@ -17,13 +17,7 @@ public abstract class CuentaBancaria {
         }
     }
 
-    public void retirar(double monto) {
-        if (monto <= 0 && saldoSuficiente(monto)) {
-           setSaldo(getSaldo() - monto);
-        } else {
-            System.out.println("Retiro fallido: monto inválido o saldo insuficiente.");
-        }
-    }
+    public abstract void retirar(double monto);
 
     protected abstract boolean saldoSuficiente(double monto);
 
