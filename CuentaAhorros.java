@@ -1,27 +1,31 @@
 public class CuentaAhorros extends CuentaBancaria {
-    private double tasaInteresMensual;
-    private static final double COMISION_MANEJO_FIJA = 10.0;
+    private final double tasaInteresMensual;
+    private final double comisionManejoMensual;
 
-    public CuentaAhorros(String numeroCuenta, String titular, double saldoInicial, double tasaInteresMensual) {
-        super(numeroCuenta, titular, saldoInicial);
+    public CuentaAhorros(String numeroCuenta, String titular, double saldo, double tasaInteresMensual, comisionManejoMensual) {
+        super(numeroCuenta, titular, saldo);
         this.tasaInteresMensual = tasaInteresMensual;
-    }
-
-    @Override
-    protected boolean puedeRetirar(double monto) {
-        return getSaldo() >= monto;
+        this.comisionManejoMensual = comisionManejoMensual;
     }
 
     @Override
     public void aplicarComisionMensual() {
-        double rendimientos = getSaldo() * tasaInteresMensual;
-        double nuevoSaldo = getSaldo() + rendimientos - COMISION_MANEJO_FIJA;
-        setSaldo(nuevoSaldo);
-        System.out.println("Comisión aplicada en Cuenta Ahorros. Rendimientos: +" + rendimientos 
-                           + " | Comisión fija: -" + COMISION_MANEJO_FIJA 
-                           + " | Nuevo Saldo: $" + getSaldo());
+        double comision = getSaldo() * tasaInteresMensual;
+        setSaldo((getSaldo() + comision) - getComisionManejoMensual())
+    }
+
+    @Override
+    protected boolean saldoSuficiente(double monto) {
+        return getSaldo() >= monto;
+    }
+
+    @Override
+    public void retirar(double monto) {
+        if (monto > 0 && saldoSuficiente(monto)) {
+            setSaldo(getSaldo() - monto);
+        }
     }
 
     public double getTasaInteresMensual() { return tasaInteresMensual; }
-    public void setTasaInteresMensual(double tasaInteresMensual) { this.tasaInteresMensual = tasaInteresMensual; }
+    public double getComisionManejoMensual() { return tasaInteresMensual; }
 }
