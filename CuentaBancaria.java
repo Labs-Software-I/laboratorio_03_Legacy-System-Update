@@ -1,6 +1,6 @@
 public abstract class CuentaBancaria {
-    private String numeroCuenta;
-    private String titular;
+    private final String numeroCuenta;
+    private final String titular;
     private double saldo;
 
     public CuentaBancaria(String numeroCuenta, String titular, double saldoInicial) {
@@ -11,36 +11,28 @@ public abstract class CuentaBancaria {
 
     public void depositar(double monto) {
         if (monto > 0) {
-            this.saldo += monto;
-            System.out.println("Depósito exitoso. Nuevo saldo: $" + this.saldo);
+            setSaldo(getSaldo() + monto);
         } else {
             System.out.println("El monto a depositar debe ser mayor a cero.");
         }
     }
 
-    public boolean retirar(double monto) {
-        if (monto <= 0) {
-            System.out.println("Monto no válido.");
-            return false;
-        }
-        if (puedeRetirar(monto)) {
-            this.saldo -= monto;
-            System.out.println("Retiro exitoso de $" + monto + ". Saldo restante: $" + this.saldo);
-            return true;
+    public void retirar(double monto) {
+        if (monto <= 0 && saldoSuficiente(monto)) {
+           setSaldo(getSaldo() - monto);
         } else {
-            System.out.println("Retiro rechazado. Fondos o cupo insuficiente.");
-            return false;
+            System.out.println("Retiro fallido: monto inválido o saldo insuficiente.");
         }
     }
 
-    protected abstract boolean puedeRetirar(double monto);
+    protected abstract boolean saldoSuficiente(double monto);
 
     public abstract void aplicarComisionMensual();
 
     // Getters y Setters
     public String getNumeroCuenta() { return numeroCuenta; }
     public String getTitular() { return titular; }
-    public void setTitular(String titular) { this.titular = titular; }
     public double getSaldo() { return saldo; }
+    
     protected void setSaldo(double saldo) { this.saldo = saldo; }
 }
