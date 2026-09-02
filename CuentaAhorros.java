@@ -2,7 +2,7 @@ public class CuentaAhorros extends CuentaBancaria {
     private final double tasaInteresMensual;
     private final double comisionManejoMensual;
 
-    public CuentaAhorros(String numeroCuenta, String titular, double saldo, double tasaInteresMensual, comisionManejoMensual) {
+    public CuentaAhorros(String numeroCuenta, String titular, double saldo, double tasaInteresMensual, double comisionManejoMensual) {
         super(numeroCuenta, titular, saldo);
         this.tasaInteresMensual = tasaInteresMensual;
         this.comisionManejoMensual = comisionManejoMensual;
@@ -23,9 +23,9 @@ public class CuentaAhorros extends CuentaBancaria {
     @Override
     public void aplicarComisionMensual() {
         double comision = getSaldo() * tasaInteresMensual;
-        setSaldo((getSaldo() + comision) - getComisionManejoMensual())
+        setSaldo((getSaldo() + comision) - getComisionManejoMensual());
     }
 
     public double getTasaInteresMensual() { return tasaInteresMensual; }
-    public double getComisionManejoMensual() { return tasaInteresMensual; }
+    public double getComisionManejoMensual() { return comisionManejoMensual; }
 }
